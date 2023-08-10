@@ -33,6 +33,7 @@ let myChart = new Chart(wheel, {
     datasets: [
       {
         backgroundColor: pieColors,
+		offset: 10,
         data: rotationValues.map(() => 1), // Create an array of 1s to represent the sectors
       },
     ],
@@ -49,7 +50,7 @@ let myChart = new Chart(wheel, {
       },
       // Display labels inside pie chart
       datalabels: {
-        color: "#ffffff",
+        color: 'rgba(0, 0, 0, 0)', // Задаем прозрачный цвет текста
         formatter: (value, context) => rotationValues[context.dataIndex].value,
         font: { size: 0 },
         anchor: "end", // Set the anchor point of the label
