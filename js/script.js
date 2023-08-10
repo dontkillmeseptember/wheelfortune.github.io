@@ -2,10 +2,13 @@ const wheel = document.getElementById("wheel");
 const spinBtn = document.getElementById("spin-btn");
 const finalValue = document.getElementById("final-value");
 
-const WHEEL_ROTATION_INTERVAL = 604800000; // Неделя в миллисекундах (7 дней * 24 часа * 60 минут * 60 секунд * 1000 миллисекунд)
-let lastSpinTime = localStorage.getItem('lastSpinTime') || 0;
+// Указываем день недели, который хотим использовать (0 - воскресенье, 1 - понедельник, и т.д.)
+const targetDayOfWeek = 1;
 
-//Object that stores values of minimum and maximum angle for a value
+let lastSpinTime = localStorage.getItem('lastSpinTime') || 0;
+let isSpinning = false; // Флаг для проверки, идет ли вращение в данный момент
+
+// Объект, который хранит значения минимального и максимального угла для значения
 const rotationValues = [
 	{ minDegree: 0, maxDegree: 30, value: "Россия", color: "#F6B66C", rotation: 0 },
 	{ minDegree: 31, maxDegree: 90, value: "Украина", color: "#F54747", rotation: 0 },
@@ -17,47 +20,47 @@ const rotationValues = [
 	{ minDegree: 361, maxDegree: 420, value: "Италия", color: "#F54747", rotation: 0 },
 	{ minDegree: 421, maxDegree: 480, value: "Англия", color: "#F6B66C", rotation: 0 },
 	{ minDegree: 481, maxDegree: 540, value: "Грузия", color: "#F54747", rotation: 0 },
-  ];
-  
-// Background color for each piece
+];
+
+// Цвет фона для каждой части
 const pieColors = rotationValues.map(item => item.color);
 
-// Create chart
+// Создать диаграмму
 let myChart = new Chart(wheel, {
-  // Plugin for displaying text on pie chart
+  // Плагин для отображения текста на круговой диаграмме
   plugins: [ChartDataLabels],
-  // Chart Type Pie
+  // Тип диаграммы: Круговая (Pie)
   type: "pie",
   data: {
-    // Settings for dataset/pie
+    // Настройки для набора данных / круговой диаграммы
     datasets: [
       {
         backgroundColor: pieColors,
 		offset: 10,
-        data: rotationValues.map(() => 1), // Create an array of 1s to represent the sectors
+        data: rotationValues.map(() => 1), // Создать массив из единиц для представления секторов
       },
     ],
   },
   options: {
-    // Responsive chart
+    // Отзывчивая диаграмма
     responsive: true,
     animation: { duration: 0 },
     plugins: {
-      // Hide tooltip and legend
+      // Скрыть подсказку (tooltip) и легенду
       tooltip: false,
       legend: {
         display: false,
       },
-      // Display labels inside pie chart
+      // Отображение меток внутри круговой диаграммы
       datalabels: {
         color: 'rgba(0, 0, 0, 0)', // Задаем прозрачный цвет текста
         formatter: (value, context) => rotationValues[context.dataIndex].value,
         font: { size: 0 },
-        anchor: "end", // Set the anchor point of the label
-        align: "start", // Set the alignment of the label
-        offset: 20, // Set the offset of the label from the edge of the slice
+        anchor: "end", // Установить точку привязки для метки
+        align: "start", // Установить выравнивание метки
+        offset: 20, // Установить смещение метки от края сегмента
         rotation: (context) => {
-          // Use the index of the data point to get the desired rotation angle
+          // Используйте индекс точки данных, чтобы получить желаемый угол поворота
           return rotationValues[context.dataIndex].rotation || 0;
         },
       },
@@ -65,10 +68,10 @@ let myChart = new Chart(wheel, {
   },
 });
 
-//display value based on the randomAngle
+// Отображение значения на основе случайного угла (randomAngle)
 const valueGenerator = (angleValue) => {
   for (let i of rotationValues) {
-    //if the angleValue is between min and max then display it
+    // Если значение угла (angleValue) находится между минимальным и максимальным, то отобразить его
     if (angleValue >= i.minDegree && angleValue <= i.maxDegree) {
       finalValue.innerHTML = `<p>${i.value}</p>`;
       spinBtn.disabled = false;
@@ -80,39 +83,27 @@ const valueGenerator = (angleValue) => {
 // Функция для сохранения значения времени последней прокрутки
 function saveLastSpinTime(time) {
 	localStorage.setItem('lastSpinTime', time);
-  }
+}
 
 // Функция для сохранения значения в localStorage
 function saveSelectedCountry(country) {
 	localStorage.setItem('selectedCountry', country);
-  }
+}
   
-  // Функция для получения сохраненного значения из localStorage
-  function getSelectedCountry() {
+// Функция для получения сохраненного значения из localStorage
+function getSelectedCountry() {
 	return localStorage.getItem('selectedCountry');
-  }  
+}
 
-// Spinner count
+// Количество прокрутов
 let count = 0;
 let resultValue = 101;
 
-function updateSpinBtnText() {
-  const currentTime = new Date().getTime();
-  const nextSpinTime = parseInt(lastSpinTime) + WHEEL_ROTATION_INTERVAL;
-  const remainingTime = nextSpinTime - currentTime;
-
-  if (remainingTime <= 0) {
-    spinBtn.textContent = "Spin";
-    return;
-  }
-
-  spinBtn.textContent = `${formatTime(remainingTime)}`;
-}
-
+// Эвент для прокрутки колеса
 spinBtn.addEventListener("click", () => {
   const currentTime = new Date().getTime();
 
-  if (currentTime - lastSpinTime >= WHEEL_ROTATION_INTERVAL) {
+  if (currentTime - lastSpinTime >= getNextSpinTimeDifference()) {
     lastSpinTime = currentTime;
     saveLastSpinTime(lastSpinTime);
 
@@ -140,22 +131,65 @@ spinBtn.addEventListener("click", () => {
       }
     }, 10);
   } else {
-    const remainingTime = WHEEL_ROTATION_INTERVAL - (currentTime - lastSpinTime);
     updateSpinBtnText();
   }
 });
 
 // Функция для форматирования времени только в часы
 function formatTime(milliseconds) {
-  const hours = Math.floor(milliseconds / (1000 * 60 * 60));
-  return `${hours} ч`;
+    const days = Math.floor(milliseconds / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((milliseconds % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((milliseconds % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((milliseconds % (1000 * 60)) / 1000);
+
+    if (days > 0) {
+        return `${days} Д`;
+    } else if (hours > 0) {
+        return `${hours} Ч`;
+    } else if (minutes > 0) {
+        return `${minutes} М`;
+    } else {
+        return `${seconds} С`;
+    }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  const savedCountry = getSelectedCountry();
-  if (savedCountry) {
-    finalValue.innerHTML = `<p>Следующий рацион из страны: ${savedCountry}</p>`;
-  }
+// Функция для получения ближайшей даты указанного дня недели
+function getNextDayOfWeek(dayOfWeek, baseDate) {
+    const daysUntilNextDay = (dayOfWeek - baseDate.getDay() + 14) % 14;
+    const nextDay = new Date(baseDate);
+    nextDay.setDate(baseDate.getDate() + daysUntilNextDay);
+    return nextDay;
+}
 
-  updateSpinBtnText();
+// Функция для вычисления разницы во времени до следующей фиксированной даты
+function getNextSpinTimeDifference() {
+    const currentTime = new Date().getTime();
+    const nextFixedDate = getNextDayOfWeek(targetDayOfWeek, new Date()); // Получаем ближайшую дату указанного дня недели
+    const timeDiff = nextFixedDate - currentTime;
+
+    return timeDiff;
+}
+
+// Функция для обновления таймера на кнопке
+function updateSpinBtnText() {
+    const remainingTime = getNextSpinTimeDifference();
+    
+    if (remainingTime <= 0) {
+        spinBtn.textContent = "Spin";
+    } else {
+        spinBtn.textContent = `${formatTime(remainingTime)}`;
+    }
+}
+
+// Эвент для изменения текста на нужный
+document.addEventListener('DOMContentLoaded', () => {
+    const savedCountry = getSelectedCountry();
+    if (savedCountry) {
+        finalValue.innerHTML = `<p>Следующий рацион из страны: ${savedCountry}</p>`;
+    }
+
+    updateSpinBtnText();
+    
+    // Обновление времени каждую секунду
+    setInterval(updateSpinBtnText, 1000);
 });
