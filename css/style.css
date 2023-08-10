@@ -2,7 +2,9 @@
 	padding: 0;
 	margin: 0;
 	box-sizing: border-box;
-	font-family: 'PT Sans', sans-serif;
+	font-family: 'Lobster', cursive;
+	/*font-family: 'Handjet', cursive;*/
+	/*font-family: 'PT Sans', sans-serif;*/
   }
   body {
 	height: 100vh;
@@ -51,7 +53,7 @@
 	background: radial-gradient(#fdcf3b 50%, #d88a40 85%);
 	color: #2B2722;
 	text-transform: uppercase;
-	font-size: 1.7em;
+	font-size: 1.5em;
 	letter-spacing: 0.1em;
 	font-weight: 600;	
   }
