@@ -13,13 +13,14 @@
   }
 
   #wrapper_end {
-	width: 70%;
-	max-width: 34.37em;
+	height: auto;
+	width: auto;
+	max-width: 50em;
 	max-height: 90vh;
 	background-color: #ffffff;
 	position: absolute;
 	transform: translate(-50%, -50%);
-	top: 10%;
+	top: 19%;
 	left: 50%;
 	padding: 1.1em;
 	border-radius: 1em;
@@ -46,20 +47,19 @@
 	display: inline-block;
 	position: relative;
 	overflow: hidden;
-	top: -10%;
-	left: -10%;
 	padding: 0em;
+	height: 100%;
+	width: 100%;
   }
 
   #wheel {
-	max-height: inherit;
-	width: inherit;
-	top: 0%;
+	height: 100%;
+	width: 100%;
 	padding: 0em;
   }
 
   #spin {
-	font: 1.0em;
+	font-size: 1.5em;
 	user-select: none;
 	cursor: pointer;
 	display: flex;
@@ -73,7 +73,7 @@
 	margin: -10%;
 	background: #fff;
 	color: #fff;
-	box-shadow: 0 0 0 4px currentColor, 0 0px 8px 5px rgba(0, 0, 0, 0.6);
+	box-shadow: 0 0 0 6px currentColor, 0 0px 8px 5px rgba(0, 0, 0, 0.6);
 	border-radius: 50%;
 	transition: 0.8s;
   }
@@ -81,8 +81,8 @@
   #spin::after {
 	content: '';
 	position: absolute;
-	top: -12px;
-	border: 10px solid transparent;
+	top: -16px;
+	border: 16px solid transparent;
 	border-bottom-color: currentColor;
 	border-top: none;
   }
@@ -90,7 +90,7 @@
   #final-value {
 	font-size: 1.4em;
 	text-align: center;
-	margin-top: 1.0em;
+	margin-top: 2em;
 	color: #202020;
 	font-weight: 500;
   }

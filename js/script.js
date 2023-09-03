@@ -41,7 +41,7 @@ const sectors = [
 	},
 	{
 		color: '#F6B66C',
-		label: 'Швеция'
+		label: 'Игорь'
 	},
 	{
 		color: '#F54747',
@@ -102,10 +102,39 @@ function rotate() {
 	spinEl.style.background = sector.color
 
 	// Добавьте условный оператор для изменения сообщения в story
-	if (selectedLabel === 'Нейросеть' || selectedLabel === 'Слава') {
+	if (selectedLabel === 'Нейросеть' || selectedLabel === 'Слава' || selectedLabel === 'Игорь') {
 		story.innerHTML = `Следующий рацион делает: ${selectedLabel}`;
 	} else {
 		story.innerHTML = `Следующий рацион из страны: ${selectedLabel}`;
+	}
+
+	if (selectedLabel === 'Италия') {
+		document.body.style.background = 'linear-gradient(135deg, #009246 33.33%, #ffffff 33.33%, #ffffff 66.66%, #ce2b37 66.66%)';
+	} else if (selectedLabel === 'Россия') {
+		document.body.style.background = 'linear-gradient(135deg, #ffffff 33.33%, #0000FF 33.33%, #0000FF 66.66%, #FF0000 66.66%)';
+	} else if (selectedLabel === 'Украина') {
+		document.body.style.background = 'linear-gradient(135deg, #005bbb 50%, #ffd500 50%)';
+	} else if (selectedLabel === 'Грузия') {
+		document.body.style.background = 'linear-gradient(135deg, #fff, #fff 33.33%, #e30a17 33.33%, #e30a17 66.66%, #fff 66.66%)';
+	} else if (selectedLabel === 'Германия') {
+		document.body.style.background = 'linear-gradient(135deg, #000, #000 33.33%, #D00 33.33%, #D00 66.66%, #FFD700 66.66%)';
+	} else if (selectedLabel === 'Польша') {
+		document.body.style.background = 'linear-gradient(135deg, #fff, #fff 50%, #dc143c 50%, #dc143c)';
+	} else if (selectedLabel === 'Англия') {
+		document.body.style.background = 'linear-gradient(135deg, #fff, #fff 25%, #cc142b 25%, #cc142b 75%, #fff 75%)';
+	} else if (selectedLabel === 'Индия') {
+		document.body.style.background = 'linear-gradient(135deg, #ff9933, #ff9933 33.33%, #fff 33.33%, #fff 66.66%, #138808 66.66%)';
+	} else if (selectedLabel === 'Слава') {
+		document.body.style.background = 'linear-gradient(135deg, #fff, #fff 33.33%, #0033A0 33.33%, #0033A0 66.66%, #fff 66.66%)';
+	} else if (selectedLabel === 'Нейросеть') {
+		document.body.style.background = 'linear-gradient(135deg, #008000, #008000 50%, #ffffff 50%, #ffffff)';
+	} else if (selectedLabel === 'Игорь') {
+		document.body.style.background = 'linear-gradient(135deg, #000000 33.33%, #FF8C00 33.33%, #FF8C00 66.66%, #ffffff 66.66%)';
+	} else if (selectedLabel === 'Испания') {
+		document.body.style.background = 'linear-gradient(135deg, #ff0000, #ff0000 50%, #ffd700 50%, #ffd700)';
+	} else {
+		// Возвращаем начальный задний фон страницы (если это не Италия)
+		document.body.style.background = 'linear-gradient(135deg, #F6B66C, #F54747)';
 	}
 
 	clearTimeout(timer);
@@ -117,6 +146,7 @@ function rotate() {
 
 	// Сохраняем значение в localStorage
 	localStorage.setItem('selectedLabel', selectedLabel);
+	localStorage.setItem('backgroundColor', document.body.style.background);
 
 	spinning = true; // Устанавливаем флаг в true, чтобы предотвратить повторное вращение
 }
@@ -127,7 +157,7 @@ function frame() {
 	angVel *= friction;
 	if (angVel < 0.002) angVel = 0;
 	ang += angVel;
-	finalValue.innerHTML = "Удачи!⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀";
+	finalValue.innerHTML = "Удачи!";
 	ang %= TAU;
 	rotate();
 }
@@ -141,17 +171,24 @@ function engine() {
 // Функция запуска всех функций при нажатиии на Spin
 function init() {
 	const storedLabel = localStorage.getItem('selectedLabel');
-
-	ctx.font = '17px Lobster'
+	const storedBackgroundColor = localStorage.getItem('backgroundColor');
 
 	sectors.forEach(drawSector)
 	rotate() // Начальное вращение
+	
+	ctx.font = '17px Lobster'
 
-	finalValue.innerHTML = "Нажмите на кнопку Старт, чтобы начать";
+	document.body.style.background = 'linear-gradient(135deg, #F6B66C, #F54747)';
 
 	if (storedLabel) {
 		story.innerHTML = `Следующий рацион из страны: ${storedLabel}`;
 	}
+
+    if (storedBackgroundColor) {
+        document.body.style.background = storedBackgroundColor;
+    }
+
+	finalValue.innerHTML = "Нажмите на кнопку Старт, чтобы начать";
 
 	engine() // Запуск
 
