@@ -4,6 +4,7 @@
 	box-sizing: border-box;
 	font-family: 'Lobster', cursive;
   }
+
   body {
 	height: 100vh;
 	display: grid;
@@ -18,11 +19,11 @@
 	background-color: #ffffff;
 	position: absolute;
 	transform: translate(-50%, -50%);
-	top: 86.5%;
+	top: 14%;
 	left: 50%;
 	padding: 1.1em;
 	border-radius: 1em;
-	box-shadow: 0em -0.5em 5em rgba(27, 8, 53, 0.19);
+	box-shadow: 0em 0em 5em rgba(20, 8, 53, 0.19);
 	z-index: 2;
   }
 
@@ -37,7 +38,7 @@
 	left: 50%;
 	padding: 3em;
 	border-radius: 1em;
-	box-shadow: 0em -1em 5em rgba(20, 8, 53, 0.5);
+	box-shadow: 0em 0em 5em rgba(20, 8, 53, 0.5);
 	z-index: 2;
   }
 
