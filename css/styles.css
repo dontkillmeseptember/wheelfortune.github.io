@@ -11,6 +11,21 @@
 	background: linear-gradient(135deg, #F6B66C, #F54747);
   }
 
+  #wrapper_end {
+	width: 70%;
+	max-width: 34.37em;
+	max-height: 90vh;
+	background-color: #ffffff;
+	position: absolute;
+	transform: translate(-50%, -50%);
+	top: 86.5%;
+	left: 50%;
+	padding: 1.1em;
+	border-radius: 1em;
+	box-shadow: 0em -0.5em 5em rgba(27, 8, 53, 0.19);
+	z-index: 2;
+  }
+
   #wrapper {
 	width: 90%;
 	max-width: 34.37em;
@@ -22,7 +37,8 @@
 	left: 50%;
 	padding: 3em;
 	border-radius: 1em;
-	box-shadow: 0 4em 5em rgba(27, 8, 53, 0.2);
+	box-shadow: 0em -1em 5em rgba(20, 8, 53, 0.5);
+	z-index: 2;
   }
 
   #wheelfortune {
@@ -74,6 +90,14 @@
 	font-size: 1.4em;
 	text-align: center;
 	margin-top: 1.0em;
+	color: #202020;
+	font-weight: 500;
+  }
+
+  #story {
+	font-size: 1.2em;
+	text-align: center;
+	margin-top: 0em;
 	color: #202020;
 	font-weight: 500;
   }
