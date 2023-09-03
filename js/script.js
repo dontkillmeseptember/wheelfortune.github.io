@@ -157,7 +157,7 @@ function frame() {
 	angVel *= friction;
 	if (angVel < 0.002) angVel = 0;
 	ang += angVel;
-	finalValue.innerHTML = "Удачи!";
+	finalValue.innerHTML = "Удачи!⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀";
 	ang %= TAU;
 	rotate();
 }
